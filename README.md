@@ -17,9 +17,9 @@ This repository contains a Vite React TypeScript application as the frontend and
 
 1. Clone the repository:
    
-   ```git clone <repository_url>```
+   ```git clone git@github.com:dentolize/dentolize-interview-frontend.git```
    
-   ```cd <repository_name>```
+   ```cd dentolize-interview-frontend```
 
 2. Install the required dependencies:
    
