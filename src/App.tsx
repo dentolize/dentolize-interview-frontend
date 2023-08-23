@@ -1,21 +1,25 @@
-import { gql, useQuery } from "@apollo/client";
+import { Routes, Route, Link, NavLink } from 'react-router-dom';
 
 import "./App.css";
+import { GETallCustomers } from "./api/data";
+import Home from './pages/Home';
+import Customers from './pages/Customers';
+import Customer from './pages/Customer';
 
 function App() {
-  const result = useQuery(gql`
-    query {
-      allCustomers {
-        id
-      }
-    }
-  `);
-
-  console.log(result);
 
   return (
-
-<div>Hello world!!</div>
+    <>
+    <nav>
+      <NavLink to={"/customers"}>To Dashboard</NavLink>
+    </nav>
+    <div>Header goes here...</div>
+    <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="/customers" element={<Customers/>}/>
+      <Route path="customers/:id" element={<Customer/>}/>
+    </Routes>
+    </>
 )
 }
 
