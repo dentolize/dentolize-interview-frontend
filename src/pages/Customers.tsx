@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GETallCustomers } from "../api/data";
 import { TCustomer } from "../types/api-types";
+import AddCustomerForm from "../components/AddCustomerForm";
 
 function Customers() {
   const [customers, setCustomers] = useState<TCustomer[]>([])
@@ -14,11 +15,13 @@ function Customers() {
     !loading && setCustomers(data.allCustomers)
     console.log(customers)
   },[loading]);
-  
+  const [showed, setForm] = useState<boolean>(false)
 
+  const showForm = () => setForm(prev=>!prev)
   
   
-  return (<>
+  return (
+  <>
 
 {loading && "loading..."}
       {customers?.map((cx) => {
@@ -33,6 +36,10 @@ function Customers() {
         </Link>
 
       )})}
+      <button type="button" onClick={()=>showForm()}>
+Add Customer
+      </button>
+      <AddCustomerForm showed={showed}/>
       </>
   )
 }
