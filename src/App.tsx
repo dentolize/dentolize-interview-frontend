@@ -1,23 +1,25 @@
-import { Routes, Route, Link, NavLink } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import "./App.css";
-import { GETallCustomers } from "./api/data";
 import Home from './pages/Home';
-import Customers from './pages/Customers';
 import Customer from './pages/Customer';
+import Customers from './pages/Customers';
+import { Error404 } from './pages/Error404';
+import Header from './components/Header';
 
 function App() {
 
   return (
     <>
-    <nav>
-      <NavLink to={"/customers"}>To Dashboard</NavLink>
-    </nav>
-    <div>Header goes here...</div>
+    <div>
+
+    <Header/>
+    </div>
     <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/customers" element={<Customers/>}/>
-      <Route path="customers/:id" element={<Customer/>}/>
+      <Route path="/:id" element={<Customer/>}/>
+      <Route path="*" element={<Error404/>}/>
     </Routes>
     </>
 )

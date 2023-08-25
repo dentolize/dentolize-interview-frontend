@@ -1,24 +1,40 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { GETallCustomers } from "../api/data";
 import { TCustomer } from "../types/api-types";
 
-function Home() {
-  const result = GETallCustomers()
-  const data: TCustomer[] = result.data.allCustomers
-  console.log(data)
-  
-  return (
+function Customers() {
+  const [customers, setCustomers] = useState<TCustomer[]>([])
 
-    <div>
-      {data.map((cx) => {
-        return (<div>
+
+  const { loading, data}: { loading: boolean, data: {"allCustomers": TCustomer[]}} = GETallCustomers()
+  
+  useEffect(() =>{
+  
+    if(!loading) setCustomers(data.allCustomers)
+    console.log(customers)
+  },[loading]);
+  
+
+  
+  
+  return (<>
+
+{loading && "loading..."}
+      {customers?.map((cx) => {
+        return (
+          <Link key={cx.id} to={`/${cx.id}`}>
+            <div>
           {cx.firstName + " " + cx.lastName}
           {cx.id}
           {cx.email}
           {cx.phone}
-        </div>);
-      })}
-    </div>
+            </div>
+        </Link>
+
+      )})}
+      </>
   )
 }
 
-export default Home
+export default Customers
