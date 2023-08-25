@@ -12,3 +12,14 @@ query {
     } 
   }
   `);
+export const GEToneCustomer = (id:string) => useQuery(gql`
+query {
+    Customer(id:${id}) {
+      id,
+      firstName,
+      lastName,
+      email,
+      phone
+    } 
+  }
+  `);

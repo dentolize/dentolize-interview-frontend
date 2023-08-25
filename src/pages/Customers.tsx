@@ -11,7 +11,7 @@ function Customers() {
   
   useEffect(() =>{
   
-    if(!loading) setCustomers(data.allCustomers)
+    !loading && setCustomers(data.allCustomers)
     console.log(customers)
   },[loading]);
   
