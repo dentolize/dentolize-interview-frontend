@@ -1,12 +1,10 @@
-// import { styled } from "styled"
-
 import { useState } from "react"
 import { styled } from "styled-components"
 import { TCustomer } from "../types/api-types"
+import ActionBtns from "./styled-components/ActionBtns"
+import FormFields from "./styled-components/FormFields"
 
-const AddCustomerForm = (showed:boolean) => {
-    console.log(showed)
-
+const AddCustomerForm = () => {
 type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
 
     const [newCustomer, setNewCustomer] = useState<TNewCustomer>({firstName: "", lastName: "", email: "", phone: ""})
@@ -18,7 +16,7 @@ type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
     console.log(newCustomer)
     }
   
-  const Main = styled.div`
+  const Wrapper = styled.div`
         align-self: center;
         background-color: #fefefe;
         border: 1px solid #f2f2f2;
@@ -28,146 +26,75 @@ type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
         max-width: 450px;
         width: 40vw;
         padding: 2rem;`
-    const FormBtns = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    padding: 1em 0 0 0;
-    button {
-    margin-left: 16px;
-    padding: .35em 1em;
-    box-shadow:  0 30px 60px -30px rgba(0, 0, 0, .5);
-    cursor: pointer;
-    border: 1px solid #3498db;
-    background-color: #fff;
-    transition: .3px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    color: #3498db;
-    &:enabled:hover {
-        background-color: #3498db;
-        color: #fff;
-        box-shadow: 0 8px 6px -6px rgba(0, 0, 0, .3);
-    }
-    &--filled {
-        @extend .a-btn;
-        background-color: #3498db;
-        border-color: #3498db;
-        color: #fff;
-        &:enabled:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-    }
-    &:disabled {
-        background-color: #ecf0f1;
-        border-color: #bdc3c7;
-        color: #6a6a6a;
-    }
-    } 
-    `
-    const FormFields = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-     margin-bottom: .5em;
-    &:last-child {
-        margin-bottom: 0;
-    }
-    .icon {
-        align-self: center;
-        fill: #2980b9;
-        width: 15px;
-        height: 15px;
-        padding: .5em .5em;
-    }
-    label {
-        color: rgba(0,0,0,0.5);
-        align-self: center;
-        flex-shrink: 0;
-        flex-basis: 100%;
-        font-size:14px;
-        font-weight: bold;
-        width: 100%;
-        .label--required:after {
-            content: '*';
-            color: red;
-            margin-left: 5px;
-        }
-        @include breakpoint(sm) {
-            flex-basis: 80px;
-            width: 80px;
-        }
-    }
-    > section {
-        display: flex;
-        flex: 1;
-        input {
-            transition: .3s;
-            border: 0;
-            border-left: 1px solid #ccc;
-            flex-grow: 1;
-            font-size: 9px;
-            font-weight: 300;
-            padding: .35em .5em;
-            background-color: #fff;
-            border: 1px solid #aaa;
-            border-radius: 8px;
-            &::placeholder{
-                opacity: 0.4
-            }
-        }
-    }`
 
+    const H1 = styled.h1`
+        font-size: 20px;
+        color: #000;
+        padding: 0.5em 0.5em;
+        width: fit-content;
+        margin-inline: auto;
+        border-radius: 3px;
+        margin-bottom: 40px;
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.4);
+        background-color: rgba(0,0,0,0.2)
+    `
 
 
     return (
     <>
-    {showed && 
-    <> 
-    <Main>
+    <Wrapper>
     <form onSubmit={AddNewCustomer}>
-        <h1>Add New Customer</h1>
+        <H1>Create New Customer</H1>
 
         <FormFields className="form-field">
-            <label htmlFor="Formfields" className="label--required">First Name</label>
+            <div className="field-wrapper">
             <section>
                 <svg className="icon icon-person"><use href="#icon-person"></use></svg>
                 <input value={newCustomer?.firstName} onChange={(e:React.ChangeEvent<HTMLInputElement>)=> setNewCustomer({...newCustomer, firstName: e.currentTarget.value})} id="Formfields" required type="text" placeholder="First Name" />
             </section>
+            </div>
         </FormFields>
 
         <FormFields className="form-field">
-            <label htmlFor="Formfields" className="label--required">Last    Name</label>
+            <div className="field-wrapper">
             <section>
                 <svg className="icon icon-person"><use href="#icon-person"></use></svg>
                 <input id="Formfields" required type="text" placeholder="Last Name" />
             </section>
+            </div>
         </FormFields>
 
         <FormFields className="form-field">
-            <label htmlFor="phone" className="label--required">Phone</label>
+            <div className="field-wrapper">
             <section>
                 <svg className="icon icon-phone"><use href="#icon-phone"></use></svg>
-                <input id="phone" required type="tel" placeholder="(234) 234-2342" />
+                <input id="phone" required type="tel" placeholder="(+20) 110 251 7181" />
             </section>
+            </div>
         </FormFields>
 
         <FormFields className="form-field">
-            <label htmlFor="email" className="label--required">Email</label>
+            <div className="field-wrapper">
             <section>
                 <svg className="icon icon-mail_outline"><use href="#icon-mail_outline"></use></svg>
-                <input id="email" required type="email" placeholder="somebody@me.com" />
+                <input id="email" required type="email" placeholder="youremail@gmail.com" />
             </section>
+            </div>
         </FormFields>
         
         
+        div
 
-        <FormBtns>
-            <button className="a-btn--filled" type="submit">Add</button>
-            <button className="a-btn">Reset</button>
-        </FormBtns>
+        <ActionBtns>
+        <div className="btn-wrapper right">
+            <button className="btn-not-filled" type="submit">Create</button>
+            <button className="btn--filled" type="reset">Reset</button>
+        </div>
+        </ActionBtns>
 
     </form>
-</Main>
+</Wrapper>
+
 
 <svg style={{position: "absolute", width: 0, height: 0}} width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg">
 <defs>
@@ -205,9 +132,6 @@ type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
 </symbol>
 </defs>
 </svg>
-      </>
-
-}
       </>
   )
 }
