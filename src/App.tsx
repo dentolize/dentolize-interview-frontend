@@ -6,7 +6,6 @@ import Customer from './pages/Customer';
 import Customers from './pages/Customers';
 import { Error404 } from './pages/Error404';
 import { DefaultLayout } from "./layout/DefaultLayout"
-import { CreateCustomer } from './pages/CreateCustomer';
 
 function App() {
 
@@ -17,7 +16,6 @@ function App() {
   <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/customers" element={<Customers/>}/>
-      <Route path="/create" element={<CreateCustomer/>}/>
       <Route path="/:id" element={<Customer/>}/>
       <Route path="*" element={<Error404/>}/>
     </Routes>

@@ -4,7 +4,7 @@ import styled from "styled-components";
 const BaseElement = styled.div`
 .btn-wrapper{
     display: flex;
-    padding: 1em 0 0 0;
+    justify-content: center;
 }
 .btn-wrapper.right{
 	justify-content: flex-end;
@@ -15,7 +15,7 @@ const BaseElement = styled.div`
 }
 
 button,a {
-margin-left: 16px;
+margin: 10px 0;
 padding: .35em 1em;
 transition: .1s;
 box-shadow:  0 30px 60px -30px rgba(0, 0, 0, .5);

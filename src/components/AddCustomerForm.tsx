@@ -1,56 +1,42 @@
 import { useState } from "react"
-import { styled } from "styled-components"
-import { TCustomer } from "../types/api-types"
+import { TNewCustomer } from "../types/api-types"
 import ActionBtns from "./styled-components/ActionBtns"
 import FormFields from "./styled-components/FormFields"
+import H1 from "./styled-components/H1"
+import Wrapper from "./styled-components/Wrapper"
+import { CreateNewCustomer } from "../api/logic"
 
 const AddCustomerForm = () => {
-type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
 
     const [newCustomer, setNewCustomer] = useState<TNewCustomer>({firstName: "", lastName: "", email: "", phone: ""})
 
     // const [errors, setErrors]
 
-    const AddNewCustomer = (e:React.FormEvent) => {
+    const addNewCustomer = (e:React.FormEvent) => {
     e.preventDefault()
-    console.log(newCustomer)
+    const {data, error} = CreateNewCustomer(newCustomer)
+    console.log(data, error)
     }
-  
-  const Wrapper = styled.div`
-        align-self: center;
-        background-color: #fefefe;
-        border: 1px solid #f2f2f2;
-        border-radius: 8px;
-        box-shadow:  0 30px 60px -30px rgba(0, 0, 0, .5);
-        min-width: 350px;
-        max-width: 450px;
-        width: 40vw;
-        padding: 2rem;`
 
-    const H1 = styled.h1`
-        font-size: 20px;
-        color: #000;
-        padding: 0.5em 0.5em;
-        width: fit-content;
-        margin-inline: auto;
-        border-radius: 3px;
-        margin-bottom: 40px;
-        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.4);
-        background-color: rgba(0,0,0,0.2)
-    `
+    const  resetForm = () => {
+        setNewCustomer({firstName: "", lastName: "", email: "", phone: ""});
+      };
 
 
     return (
     <>
     <Wrapper>
-    <form onSubmit={AddNewCustomer}>
+    <div className="form-wrapper">
         <H1>Create New Customer</H1>
+    <form className="form-body" onSubmit={addNewCustomer}>
 
         <FormFields className="form-field">
             <div className="field-wrapper">
             <section>
                 <svg className="icon icon-person"><use href="#icon-person"></use></svg>
-                <input value={newCustomer?.firstName} onChange={(e:React.ChangeEvent<HTMLInputElement>)=> setNewCustomer({...newCustomer, firstName: e.currentTarget.value})} id="Formfields" required type="text" placeholder="First Name" />
+
+                <input value={newCustomer.firstName} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, firstName: e.target.value})} required type="text" placeholder="First Name" />
+
             </section>
             </div>
         </FormFields>
@@ -59,7 +45,7 @@ type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
             <div className="field-wrapper">
             <section>
                 <svg className="icon icon-person"><use href="#icon-person"></use></svg>
-                <input id="Formfields" required type="text" placeholder="Last Name" />
+                <input value={newCustomer.lastName} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, lastName: e.target.value})} required type="text" placeholder="Last Name" />
             </section>
             </div>
         </FormFields>
@@ -68,7 +54,7 @@ type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
             <div className="field-wrapper">
             <section>
                 <svg className="icon icon-phone"><use href="#icon-phone"></use></svg>
-                <input id="phone" required type="tel" placeholder="(+20) 110 251 7181" />
+                <input value={newCustomer.phone} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, phone: e.target.value})} id="phone" required type="tel" placeholder="(+20) 110 251 7181" />
             </section>
             </div>
         </FormFields>
@@ -77,22 +63,20 @@ type TNewCustomer = Omit<TCustomer, "id" | "__typename" >
             <div className="field-wrapper">
             <section>
                 <svg className="icon icon-mail_outline"><use href="#icon-mail_outline"></use></svg>
-                <input id="email" required type="email" placeholder="youremail@gmail.com" />
+                <input value={newCustomer.email} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, email: e.target.value})} id="email" required placeholder="youremail@gmail.com" />
             </section>
             </div>
         </FormFields>
         
-        
-        div
-
         <ActionBtns>
         <div className="btn-wrapper right">
             <button className="btn-not-filled" type="submit">Create</button>
-            <button className="btn--filled" type="reset">Reset</button>
+            <button onClick={()=>resetForm()} className="btn--filled" type="reset">Reset</button>
         </div>
         </ActionBtns>
 
     </form>
+</div>
 </Wrapper>
 
 

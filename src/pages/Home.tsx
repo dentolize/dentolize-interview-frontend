@@ -1,14 +1,7 @@
 import { NavLink } from "react-router-dom"
-import styled from "styled-components"
 import ActionBtns from "../components/styled-components/ActionBtns"
+import Wrapper from "../components/styled-components/Wrapper"
 
-const Wrapper = styled.div`
-height: 100%;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-`
 
 function Home() {
   return (
@@ -17,7 +10,9 @@ function Home() {
         To Check out the customers and their data.
     </div>
     <ActionBtns>
+    <div className="btn-wrapper">
     <NavLink to={"/customers"} className="btn-filled">Visit Dashboard</NavLink>
+    </div>
     </ActionBtns>
 
     </Wrapper>
