@@ -3,8 +3,23 @@ import { TNewCustomer } from "../types/api-types"
 import ActionBtns from "./styled-components/ActionBtns"
 import FormFields from "./styled-components/FormFields"
 import H1 from "./styled-components/H1"
-import Wrapper from "./styled-components/Wrapper"
 import { CreateNewCustomer } from "../api/logic"
+import styled from "styled-components"
+
+const FormWrapper = styled.div`
+display: flex;
+margin: auto;
+flex-direction: column;
+gap: 1em;
+align-items: center;
+background-color: #fefefe;
+border: 1px solid #f2f2f2;
+border-radius: 8px;
+box-shadow:  0 30px 60px -30px rgba(0, 0, 0, .2);
+width: 50vw;
+padding: 3rem;
+`
+
 
 const AddCustomerForm = () => {
 
@@ -25,13 +40,13 @@ const AddCustomerForm = () => {
 
     return (
     <>
-    <Wrapper>
-    <div className="form-wrapper">
+    <FormWrapper>
+    <div className="form-Formwrapper">
         <H1>Create New Customer</H1>
     <form className="form-body" onSubmit={addNewCustomer}>
 
         <FormFields className="form-field">
-            <div className="field-wrapper">
+            <div className="field-Formwrapper">
             <section>
                 <svg className="icon icon-person"><use href="#icon-person"></use></svg>
 
@@ -42,7 +57,7 @@ const AddCustomerForm = () => {
         </FormFields>
 
         <FormFields className="form-field">
-            <div className="field-wrapper">
+            <div className="field-Formwrapper">
             <section>
                 <svg className="icon icon-person"><use href="#icon-person"></use></svg>
                 <input value={newCustomer.lastName} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, lastName: e.target.value})} required type="text" placeholder="Last Name" />
@@ -51,7 +66,7 @@ const AddCustomerForm = () => {
         </FormFields>
 
         <FormFields className="form-field">
-            <div className="field-wrapper">
+            <div className="field-Formwrapper">
             <section>
                 <svg className="icon icon-phone"><use href="#icon-phone"></use></svg>
                 <input value={newCustomer.phone} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, phone: e.target.value})} id="phone" required type="tel" placeholder="(+20) 110 251 7181" />
@@ -60,7 +75,7 @@ const AddCustomerForm = () => {
         </FormFields>
 
         <FormFields className="form-field">
-            <div className="field-wrapper">
+            <div className="field-Formwrapper">
             <section>
                 <svg className="icon icon-mail_outline"><use href="#icon-mail_outline"></use></svg>
                 <input value={newCustomer.email} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, email: e.target.value})} id="email" required placeholder="youremail@gmail.com" />
@@ -69,7 +84,7 @@ const AddCustomerForm = () => {
         </FormFields>
         
         <ActionBtns>
-        <div className="btn-wrapper right">
+        <div className="btn-Formwrapper right">
             <button className="btn-not-filled" type="submit">Create</button>
             <button onClick={()=>resetForm()} className="btn--filled" type="reset">Reset</button>
         </div>
@@ -77,7 +92,7 @@ const AddCustomerForm = () => {
 
     </form>
 </div>
-</Wrapper>
+</FormWrapper>
 
 
 <svg style={{position: "absolute", width: 0, height: 0}} width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg">

@@ -1,14 +1,17 @@
 import Header from "../components/Header"
+import { AppWrapper } from "../components/styled-components/AppWrapper.styled"
+import { Container } from "../components/styled-components/Container.styled"
+import { GlobalStyles } from "../components/styled-components/GlobalSyles.styled"
 // import Main from "../components/styled-components/Main"
 
 export const DefaultLayout =({children}:{children: JSX.Element}) =>{
 
     return(
-        <div className="layout">
-            <div className="header">
+
+        <AppWrapper>
+            <GlobalStyles/>
                 <Header/>
-            </div>
-            <div className="main-div">{children}</div>
-        </div>
+            <Container>{children}</Container>
+        </AppWrapper>
     )
 }
