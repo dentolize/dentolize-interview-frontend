@@ -76,14 +76,170 @@ display:flex;
 justify-content: space-between;
 gap: 0.5em;
 padding: 2em;
-// background-color: #fff;
-// border-radius: 8px;
-// box-shadow: 2px 2px 2px 20px rgba(0, 0, 0, 0.3)
+width: 80%;
+@media (max-width: 500px){
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  }
 `
 
 
+const OpaqueLayer = styled.div`
+
+    position:absolute;
+    width:100%;
+    height:100vh;
+  top: 0;
+  right: 0;
+  opacity: .8;
+  trandition: .2s;
+  background: #000;
+  z-index: 5;
+`
+
+const CardsContainer = styled.div`
+
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+@media (max-width: 760px){
+  // padding-top: 30rem;
+}
+
+`
+
+const FormWrapper = styled.div`
+  position: relative;
+
+  `
+
+  const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+    
+  }
+  button,a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: button;
+    width: fit-content;
+    backface-visibility: hidden;
+    background-color: #405cf5;
+    height: fit-content;
+    border-radius: 6px;
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+    font-size: 11px;
+    padding: 10px 20px;
+    text-align: center;
+    transition: all .2s,box-shadow .08s ease-in;
+    user-select: none;
+  
+  &:disabled {
+    cursor: default;
+  }
+  
+  &:focus {
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+  }
+    `
+  const AddButtonWrapper = styled.div`
+  display: flex;
+  align-items: space-between;
+  button,a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: button;
+    width: fit-content;
+    backface-visibility: hidden;
+    background-color: #405cf5;
+    border-radius: 6px;
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    height: 44px;
+    margin: 12px 0 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0 25px;
+    text-align: center;
+    transition: all .2s,box-shadow .08s ease-in;
+    user-select: none;
+  
+  &:disabled {
+    cursor: default;
+  }
+  
+  &:focus {
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+  }
+    `
+
+  const RemoveButtonWrapper = styled.div`
+  > div{
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+  button,a{
+    appearance: button;
+    width: fit-content;
+    backface-visibility: hidden;
+    background-color: red;
+    border-radius: 6px;
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+    font-size: 11px;
+    padding: 10px 20px;
+    text-align: center;
+    transition: all .2s,box-shadow .08s ease-in;
+    user-select: none;
+  
+  &:disabled {
+    cursor: default;
+  }
+  
+  &:focus {
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+  }
+    `
+
+
+const FlexCards = styled.div`
+display:flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 0.5em;
+`
+const Card = styled.div`
+min-width: 300px;
+border-radius: 30px;
+padding: 20px 15px;
+text-align: center;
+box-shadow: 20px 20px 20px darken(rgba(0,2), 2%),
+-20px -20px 20px lighten(rgba(0,2), 2%);
+background-color: rgba(0, 0, 0, 0.2);
+`
+
   return (
-    <Container>
+    <CardsContainer>
 <FlexDiv>
     <SearchWrapper>
     <input value={""} type="text" placeholder="Search"/>
@@ -93,21 +249,19 @@ padding: 2em;
       <path d="M21 21l-4.35-4.35"></path>
     </svg>
     </SearchWrapper>
-    <ActionBtns>
-      <div className="btn-wrapper right">
+    <AddButtonWrapper>
             <button onClick={()=>showModal()} type="button">
             + New Customer
             </button>
-      </div>
-      </ActionBtns>
+    </AddButtonWrapper>
 </FlexDiv>
 
 {showed &&
       <>
-        <div className="opaque-bg" onClick={()=>setShowed(false)}></div>
-      <div>
+        <OpaqueLayer onClick={()=>setShowed(false)}></OpaqueLayer>
+      <FormWrapper>
       <AddCustomerForm />
-      </div>
+      </FormWrapper>
       </>
       }
 
@@ -115,30 +269,36 @@ padding: 2em;
     <div className="cards-wrapper">
     {loading && "loading..."}
       <div>
-      <Cards>
-      <div className="container">
+        <FlexCards>
       {customers?.map((cx) => {
         return (
-          
-          <div key={cx.id} className="card">
-            <div className="close-btn" onClick={()=>deleteCustomer(cx.id, cx.firstName, cx.lastName)}>+</div>
+          <Card>
+          <div key={cx.id}>
           <h3>Name: {cx.firstName + " " + cx.lastName}</h3>
           <p>Email: {cx.email}</p>
           <p>Phone: {cx.phone}</p>
-          <ActionBtns>
+            </div>
+            <ButtonWrapper>
+              <div>
+
+            <RemoveButtonWrapper>
+          <button onClick={()=>deleteCustomer(cx.id, cx.firstName, cx.lastName)}>Remove</button>
+            </RemoveButtonWrapper>
           <Link className="btn-not-filled" to={`/${cx.id}`}>
           Edit</Link>
-          <Link className="btn-not-filled" to={`/${cx.id}`}>
+              </div>
+              <div>
+          <Link className="btn-not-filled" to={`/customers/${cx.id}`}>
           Visit Profile</Link>
-          </ActionBtns>
-            </div>
+              </div>
+            </ButtonWrapper>
+          </Card>
 
           )})}
-          </div>
-          </Cards>
+            </FlexCards>
       </div>
       </div>
-      </Container>
+      </CardsContainer>
     
 
   )

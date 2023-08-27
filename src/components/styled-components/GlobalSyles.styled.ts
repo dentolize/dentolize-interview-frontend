@@ -65,5 +65,8 @@ button, a {
   cursor: pointer;
   text-decoration: none;
 }
-
+button{
+  background-color: none;
+border: none;
+}
 `

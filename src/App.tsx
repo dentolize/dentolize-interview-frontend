@@ -34,7 +34,7 @@ function App() {
   <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/customers" element={<Customers/>}/>
-      <Route path="/:id" element={<Customer/>}/>
+      <Route path="/customers/:id" element={<Customer/>}/>
       <Route path="*" element={<Error404/>}/>
     </Routes>
 </DefaultLayout>

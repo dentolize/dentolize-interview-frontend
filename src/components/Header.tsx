@@ -12,6 +12,11 @@ export const HeaderWrapper = styled.div`
   width: 100%;
   padding: 16px 24px;
 
+  @media (max-width: 400px){
+    flex-direction: column;
+    gap: 1.5em;
+  }
+  
 
   button{
     background: none;
@@ -25,10 +30,22 @@ export const HeaderWrapper = styled.div`
   line-height: 24px;
   font-weight: 700;
   margin: 0 32px;
+
+  @media (max-width: 400px){
+    font-size: 80px;
+    padding: 2rem;
+  }
+}
+> div:last-child {
+
+  @media (max-width: 400px){
+    padding: 10px 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 5px;
+  }
 }
 
-
-  > div:last-child {
+  > div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,6 +66,9 @@ export const HeaderWrapper = styled.div`
       font-size: 16px;
       line-height: 24px;
       font-weight: 700;
+      @media (max-width: 400px){
+display: none;
+      }
     }
      img{
       width: 32px;
@@ -60,6 +80,7 @@ export const HeaderWrapper = styled.div`
   }
     }
 }
+
 
 `
 const Header = () => {
