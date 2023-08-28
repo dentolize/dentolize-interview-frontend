@@ -301,10 +301,18 @@ function Customers() {
 const [searchText, setSearchText] = useState<string>("")
 
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearchText(e.target.value);
-    console.log(searchText);
-
+    const searchVal = e.target.value.toLowerCase()
+    setSearchText(searchVal);
+    console.log(searchVal);
+    
   }
+  const filteredCustomers = customers.filter(customer => {
+    if(searchText === ""){
+      return customer
+    }else{
+      return customer.firstName.toLowerCase().includes(searchText) || customer.lastName.toLowerCase().includes(searchText)
+    }
+  })
 
 
   const [removeCustomer, {loading: DELELTE_LOADING, data: RM_CUSTOMER, error }] = useMutation(QUERIES.REMOVE_CUSTOMER);
@@ -375,7 +383,7 @@ const [searchText, setSearchText] = useState<string>("")
     {GET_ALL_LOADING && <Spinner/>}
       <div>
         <FlexCards>
-      {customers?.map((cx) => {
+      {filteredCustomers?.map((cx) => {
         return (
           <Card key={cx.id}>
           <div>
