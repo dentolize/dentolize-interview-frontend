@@ -7,6 +7,21 @@ export const GlobalStyles = createGlobalStyle`
 }
 
 :root {
+
+  --input-color: #99A3BA;
+  --input-border: #CDD9ED;
+  --input-background: #fff;
+  --input-placeholder: #CBD1DC;
+
+  --input-border-focus: #275EFE;
+
+  --group-color: var(--input-color);
+  --group-border: var(--input-border);
+  --group-background: #EEF4FF;
+
+  --group-color-focus: #fff;
+  --group-border-focus: var(--input-border-focus);
+  --group-background-focus: #678EFE;
   --app-container: #f3f6fd;
   --main-color: #1f1c2e;
   --secondary-color: #4A4A4A;

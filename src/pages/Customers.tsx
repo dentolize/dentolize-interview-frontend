@@ -3,12 +3,85 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 // import { GetAllCustomers } from "../api/logic";
-import AddCustomerForm from "../components/AddCustomerForm";
-import { TCustomer } from "../types/api-types";
+import { TCustomer, TNewCustomer } from "../types/api-types";
 import { useMutation, useQuery } from "@apollo/client";
 import { QUERIES } from "../api/queries";
 import Spinner from "../components/Spinner";
 
+const NewCustomerForm = styled.div`
+position:absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+transition: all 0.2s;
+z-index: 10;
+width: 70%;
+
+form {
+  background: #F5F9FF; 
+  padding: 3em;
+  box-sizing: border-box;
+  margin: 0px auto;
+  box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  h1 {
+    box-sizing: border-box;
+    padding: 20px;
+background-color: rgba(0,0,0,0.08);
+text-align: center;
+margin:0em auto 1em;
+border-radius: 8px;
+
+  }
+> div{
+  display: flex;
+  margin: 0 0 1rem 0;
+
+label {
+  text-align: right;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+>  input {
+  width: 70%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  justify-content: space-between;
+  font-size: 1.1rem;
+}
+input {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 6px;
+  -webkit-appearance: none;
+  color: var(--input-color);
+  border: 1px solid var(--input-border);
+  background: var(--input-background);
+  transition: border .3s ease;
+  &::placeholder {
+      color: var(--input-placeholder);
+  }
+  &:focus {
+      outline: none;
+      border-color: var(--input-border-focus);
+  }
+}
+> div:last-child{
+  display: flex;
+  width: 40%;
+  justify-content: space-between;
+button:last-child{
+  background-color: #e23e3e;
+}
+}
+`
 
 
 const SearchWrapper = styled.div`
@@ -56,11 +129,13 @@ width: 80%;
 `
 const OpaqueLayer = styled.div`
 
-    position:absolute;
+    position:fixed;
     width:100%;
-    height:100vh;
+    height:100%;
   top: 0;
   right: 0;
+  left: 0;
+  bottom: 0;
   opacity: .8;
   trandition: .2s;
   background: #000;
@@ -275,22 +350,14 @@ left: 10px;
 
 function Customers() {
   
-  const [customers, setCustomers] = useState<TCustomer[]>([])
-  const [showed, setShowed] = useState<boolean>(false)
-  // const { loading, data}: { loading: boolean, data: {"allCustomers": TCustomer[]}} = GetAllCustomers()
-  const { loading: GET_ALL_LOADING, data: GET_CUSTOMERS} = useQuery(QUERIES.GET_CUSTOMERS)
 
-  
+// =========== Handle API requests =================
 
+  // GET All
+  const [customers, setCustomers] = useState<TCustomer[]>([]) 
 
+  const { loading: GET_ALL_LOADING, data: GET_CUSTOMERS, refetch} = useQuery(QUERIES.GET_CUSTOMERS)
 
-
-
-
-  const showModal = () => {
-    setShowed(prev=> !prev)
-    console.log(showed)
-  }
   useEffect(() =>{
   
     !GET_ALL_LOADING && setCustomers(GET_CUSTOMERS.allCustomers)
@@ -298,10 +365,72 @@ function Customers() {
   },[GET_ALL_LOADING]);
 
 
-const [searchText, setSearchText] = useState<string>("")
+// DELETE
 
-  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    const searchVal = e.target.value.toLowerCase()
+const [removeCustomer, {loading: DELELTE_LOADING, data: RM_CUSTOMER, error }] = useMutation(QUERIES.REMOVE_CUSTOMER);
+
+const removeCx =  (id:string, firstName: string, lastName: string) =>{
+  {
+    const confirmed = confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
+      if(!confirmed) return;
+      setNotificationType({bg: "red", color:"#fff", body: `${firstName + " " + lastName} has been removed!`})
+      removeCustomer({ variables: { id }})
+      console.log(RM_CUSTOMER)
+      refetch()
+      notify()
+}
+}
+
+const [showNotifictaion, setShowNotification] = useState<boolean>(false)
+const [notificationType, setNotificationType] = useState<{bg:string, color:string, body: string}>({bg:"green", color:"#fff",body: "Voila!"})
+
+const notify = () => {
+  setShowNotification(true)
+  setTimeout(() => {
+    setShowNotification(false)
+  },3000)
+}
+
+// Create New
+const [showed, setShowed] = useState<boolean>(false)
+
+const showModal = () => {
+  setShowed(prev=> !prev)
+  console.log(showed)
+}
+
+const [newCustomer, setNewCustomer] = useState<TNewCustomer>({firstName: "", lastName: "", email: "", phone: ""})
+  
+
+// const [errors, setErrors]
+
+
+const [createCustomer, {loading: CREATE_LOADING, data: CREATE_DATA, error: CREATE_ERROR }] = useMutation(QUERIES.CREATE_CUSTOMER);
+
+const addNewCustomer = (e:React.FormEvent) => {
+e.preventDefault()
+console.log(newCustomer)
+
+createCustomer({ variables: { ...newCustomer }})
+console.log(CREATE_DATA)
+setNotificationType({bg: "green", color:"#fff", body: `${newCustomer.firstName + " " + newCustomer.lastName} Has Been Created!`})
+      console.log(RM_CUSTOMER)
+      setShowed(false)
+      setNewCustomer({firstName: "", lastName: "", email: "", phone: ""})
+      refetch()
+      notify()
+
+    }
+
+  
+  
+  
+  // =========== Handle Search Bar =================
+  
+  const [searchText, setSearchText] = useState<string>("")
+  
+function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+const searchVal = e.target.value.toLowerCase()
     setSearchText(searchVal);
     console.log(searchVal);
     
@@ -315,28 +444,7 @@ const [searchText, setSearchText] = useState<string>("")
   })
 
 
-  const [removeCustomer, {loading: DELELTE_LOADING, data: RM_CUSTOMER, error }] = useMutation(QUERIES.REMOVE_CUSTOMER);
-
-  const removeCx =  (id:string, firstName: string, lastName: string) =>{
-    {
-      const confirmed = confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
-        if(!confirmed) return;
-        setNotificationType({bg: "red", color:"#fff", body: `${firstName + " " + lastName} has been removed!`})
-        removeCustomer({ variables: { id }})
-        console.log(RM_CUSTOMER)
-        notify()
-  }
-  }
-
-  const [showNotifictaion, setShowNotification] = useState<boolean>(false)
-  const [notificationType, setNotificationType] = useState<{bg:string, color:string, body: string}>({bg:"green", color:"#fff",body: "Voila!"})
-
-  const notify = () => {
-    setShowNotification(true)
-    setTimeout(() => {
-      setShowNotification(false)
-    },3000)
-  }
+// Conditional Rendering
   if (DELELTE_LOADING) return <Spinner/>
   if (error) return `Customer Not Removed! ${error.message}`;
 
@@ -372,9 +480,39 @@ const [searchText, setSearchText] = useState<string>("")
 {showed &&
       <>
         <OpaqueLayer onClick={()=>setShowed(false)}></OpaqueLayer>
-      <FormWrapper>
-      <AddCustomerForm />
-      </FormWrapper>
+      <NewCustomerForm>
+      {/* <AddCustomerForm /> */}
+      <form onSubmit={addNewCustomer}>
+        <h1>Create New Customer</h1>
+        {CREATE_LOADING && "Creating new Customer" + <Spinner/>}
+  <div>
+    <label htmlFor="first-name">First Name</label>
+    <input type="text" name="first-name" id="first-name" placeholder="Joe" required value={newCustomer.firstName} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, firstName: e.target.value})} />
+  </div>
+  <div>
+    <label htmlFor="last-name">Last Name</label>
+    <input type="text" name="last-name" id="last-name" placeholder="Doe" required value={newCustomer.lastName} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, lastName: e.target.value})} />
+  </div>
+  <div>
+    <label htmlFor="email-input">Email</label>
+    <input type="email" name="email-input" id="email-input" placeholder="example@domain.com" required value={newCustomer.email} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, email: e.target.value})}/>
+  </div>
+  <div>
+    <label htmlFor="phone-input">Phone</label>
+    <input type="phone" name="phone-input" id="phone-input" required placeholder="(+02) 109 757 6804"  value={newCustomer.phone} onChange={(e:React.ChangeEvent<HTMLInputElement>) => setNewCustomer({...newCustomer, phone: e.target.value})}/>
+  </div>
+  <div>
+    <AddButtonWrapper>
+      <button type="submit">Create
+        </button>
+      <button type="reset">Reset
+        </button>
+      </AddButtonWrapper> 
+      {CREATE_ERROR && "Invalid Inputs!"}
+      
+  </div>
+</form>
+      </NewCustomerForm>
       </>
       }
 
