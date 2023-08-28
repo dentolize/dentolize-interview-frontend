@@ -7,6 +7,7 @@ import AddCustomerForm from "../components/AddCustomerForm";
 import { TCustomer } from "../types/api-types";
 import { useMutation, useQuery } from "@apollo/client";
 import { QUERIES } from "../api/queries";
+import Spinner from "../components/Spinner";
 
 
 
@@ -200,7 +201,77 @@ box-shadow: 20px 20px 20px darken(rgba(0,2), 2%),
 background-color: rgba(0, 0, 0, 0.2);
 `
 
+const Notification = styled.div`
+position: absolute;
+bottom: 10px;
+left: 10px;
+> div {
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
 
+> div {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	positon: relative;
+	width: 50px;
+	height: 50px;
+	background: ${({bg})=>bg};
+	transform: scale(0);
+	border-radius: 50%;
+	color: ${({color})=>color};
+	opacity: 0;
+	overflow: hidden;
+	animation: scale-in .3s ease-out forwards,
+		expand .35s .25s ease-out forwards;
+
+> div  {
+	display: flex;
+	align-items: center;
+	padding: 0 16px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	animation: fade-in .65s ease-in forwards;
+>span:first-child{
+  border-radius: 50%;
+  padding: 10px 15px;
+  background-color: rgba(255, 255, 255,.1);
+}
+}
+}
+
+@keyframes scale-in {
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes expand {
+	50% {
+		width: 350px;
+		border-radius: 6px;
+	}
+	100% {
+		width: 300px;
+		border-radius: 4px;
+		box-shadow: 0px 1px 3px 0px rgba(0,0,0,.2),
+								0px 1px 1px 0px rgba(0,0,0,.14),
+								0px 3px 3px -1px rgba(0,0,0,.12);
+	}
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: .8;
+	}
+}
+`
 
 function Customers() {
   
@@ -211,10 +282,7 @@ function Customers() {
 
   
 
-// const deleteCustomer =  (id:string, firstName: string, lastName: string) =>{
-//   confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
 
-// }
 
 
 
@@ -241,14 +309,42 @@ const [searchText, setSearchText] = useState<string>("")
 
   const [removeCustomer, {loading: DELELTE_LOADING, data: RM_CUSTOMER, error }] = useMutation(QUERIES.REMOVE_CUSTOMER);
 
-  console.log(RM_CUSTOMER)
+  const removeCx =  (id:string, firstName: string, lastName: string) =>{
+    {
+      const confirmed = confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
+        if(!confirmed) return;
+        setNotificationType({bg: "red", color:"#fff", body: `${firstName + " " + lastName} has been removed!`})
+        removeCustomer({ variables: { id }})
+        console.log(RM_CUSTOMER)
+        notify()
+  }
+  }
 
+  const [showNotifictaion, setShowNotification] = useState<boolean>(false)
+  const [notificationType, setNotificationType] = useState<{bg:string, color:string, body: string}>({bg:"green", color:"#fff",body: "Voila!"})
 
-  if (DELELTE_LOADING) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
+  const notify = () => {
+    setShowNotification(true)
+    setTimeout(() => {
+      setShowNotification(false)
+    },3000)
+  }
+  if (DELELTE_LOADING) return <Spinner/>
+  if (error) return `Customer Not Removed! ${error.message}`;
 
   return (
     <CardsContainer>
+      {showNotifictaion && <Notification bg={notificationType.bg} color={notificationType.color}>
+      <div>
+	<div>
+		<div>
+			<span>i</span>
+			<span>&nbsp;&nbsp;{notificationType.body}</span>
+		</div>
+	</div>
+</div>
+
+        </Notification>}
 <FlexDiv>
     <SearchWrapper>
     <input value={searchText} onChange={(e)=>handleSearch(e)} type="text" placeholder="Search"/>
@@ -276,7 +372,7 @@ const [searchText, setSearchText] = useState<string>("")
 
 
     <div className="cards-wrapper">
-    {GET_ALL_LOADING && "loading..."}
+    {GET_ALL_LOADING && <Spinner/>}
       <div>
         <FlexCards>
       {customers?.map((cx) => {
@@ -291,9 +387,7 @@ const [searchText, setSearchText] = useState<string>("")
               <div>
 
             <RemoveButtonWrapper>
-          <button onClick={()=>{
-              removeCustomer({ variables: { id:cx.id } });
-          }}>Remove</button>
+          <button onClick={()=>removeCx(cx.id, cx.firstName, cx.lastName)}>Remove</button>
             </RemoveButtonWrapper>
           <Link className="btn-not-filled" to={`/${cx.id}`}>
           Edit</Link>

@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { useQuery } from "@apollo/client"
 import { QUERIES } from "../api/queries"
 import { Container } from "../components/styled-components/Container.styled"
+import Spinner from "../components/Spinner"
 
 
 const CustomerDataContainer  = styled.div`
@@ -101,6 +102,8 @@ const {loading: GET_CUSTOMER_LOADING, data: GET_ONE_CUSTOMER} = useQuery(QUERIES
 !GET_CUSTOMER_LOADING && setCustomer(GET_ONE_CUSTOMER.Customer) 
 console.log(GET_ONE_CUSTOMER)
   },[GET_CUSTOMER_LOADING])
+
+  if(GET_CUSTOMER_LOADING) return <Spinner/>
 
   return (
     <CustomerDataContainer>
