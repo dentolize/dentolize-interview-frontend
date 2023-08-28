@@ -1,30 +1,12 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { GetOneCustomer } from "../api/logic"
+// import { GetOneCustomer } from "../api/logic"
 import { TCustomer } from "../types/api-types"
-import Cards from "../components/styled-components/Cards.styled"
 import styled from "styled-components"
-function Customer() {
-  const [customer, setCustomer] = useState<TCustomer>()
-  const { id }: {id: string} = useParams() 
+import { useQuery } from "@apollo/client"
+import { QUERIES } from "../api/queries"
+import { Container } from "../components/styled-components/Container.styled"
 
-const {loading, data}: { loading: boolean, data: {"Customer": TCustomer}} = GetOneCustomer(id)
-
-
- useEffect(()=> {
-!loading && setCustomer(data.Customer) 
-console.log(data)
-  },[loading])
-
-
-const OrdersIndicator = styled.div`
-
-  font-size: 6rem;
-  font-weight: 700;
-  color: var(--app-container);
-  opacity: .6;
-
-`
 
 const CustomerDataContainer  = styled.div`
 display: flex;
@@ -105,6 +87,21 @@ color: var(--main-color);
 opacity: .4;
 margin: auto;`
 
+
+function Customer() {
+  const [customer, setCustomer] = useState<TCustomer>()
+  const { id }: {id: string} = useParams() 
+
+const {loading: GET_CUSTOMER_LOADING, data: GET_ONE_CUSTOMER} = useQuery(QUERIES.GET_ONE_CUSTOMER, {
+  variables: { id },
+})
+
+
+ useEffect(()=> {
+!GET_CUSTOMER_LOADING && setCustomer(GET_ONE_CUSTOMER.Customer) 
+console.log(GET_ONE_CUSTOMER)
+  },[GET_CUSTOMER_LOADING])
+
   return (
     <CustomerDataContainer>
     <CustomerData>
@@ -117,15 +114,17 @@ margin: auto;`
           <p>Number of Orders: {customer?.Orders.length}</p>
           </section>
           </CustomerData>
-          <H1>
-            {customer?.Orders.length + " " + "Order"}
 
+  {customer?.Orders.length && 
+    <>
+          <H1>
+            {customer?.Orders.length + " "}{customer?.Orders.length === 1 ? "Order" : "Orders"}
           </H1>
           <OrderData>
           <ul>
         {customer?.Orders.map(order=>(
-              <li>
-          <section key={order.id}>
+              <li key={order.id}>
+          <section>
               <p>Order Number: {order?.orderNumber}</p>
           <p>Date: {order?.orderStatus}</p>
           <p>Status: {order?.orderDate}</p> 
@@ -134,8 +133,12 @@ margin: auto;`
               </li>
         ))}
         </ul>
-          </OrderData>
+        </OrderData>
+    </>
+}
 
+{!customer?.Orders.length && <Container><H1>
+  No Orders</H1></Container>}
     </CustomerDataContainer>
   )
 }

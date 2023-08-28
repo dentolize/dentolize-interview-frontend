@@ -3,7 +3,6 @@ import { TNewCustomer } from "../types/api-types"
 import ActionBtns from "./styled-components/ActionBtns"
 import FormFields from "./styled-components/FormFields"
 import H1 from "./styled-components/H1"
-import { CreateNewCustomer } from "../api/logic"
 import styled from "styled-components"
 
 const FormWrapper = styled.div`
@@ -29,8 +28,8 @@ const AddCustomerForm = () => {
 
     const addNewCustomer = (e:React.FormEvent) => {
     e.preventDefault()
-    const {data, error} = CreateNewCustomer(newCustomer)
-    console.log(data, error)
+    // const {data, error} = CreateNewCustomer(newCustomer)
+    // console.log(data, error)
     }
 
     const  resetForm = () => {

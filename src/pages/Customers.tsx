@@ -1,46 +1,17 @@
 import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
-import { DeleteCustomer, GetAllCustomers } from "../api/logic";
-import { TCustomer } from "../types/api-types";
-import ActionBtns from "../components/styled-components/ActionBtns";
-import Cards from "../components/styled-components/Cards.styled";
-import AddCustomerForm from "../components/AddCustomerForm";
 import styled from "styled-components";
-import { Container } from "../components/styled-components/Container.styled";
-
-
-function Customers() {
-  
-  const [customers, setCustomers] = useState<TCustomer[]>([])
-  const [showed, setShowed] = useState<boolean>(false)
-  const { loading, data}: { loading: boolean, data: {"allCustomers": TCustomer[]}} = GetAllCustomers()
-
-  
-
-const deleteCustomer = (id:string, firstName: string, lastName: string) => {
-  confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
-
-  DeleteCustomer(id)
-  // console.log(x)
-}
-
-
-
-  const showModal = () => {
-    setShowed(prev=> !prev)
-    console.log(showed)
-  }
-  useEffect(() =>{
-  
-    !loading && setCustomers(data.allCustomers)
-    console.log(customers)
-  },[loading]);
+// import { GetAllCustomers } from "../api/logic";
+import AddCustomerForm from "../components/AddCustomerForm";
+import { TCustomer } from "../types/api-types";
+import { useMutation, useQuery } from "@apollo/client";
+import { QUERIES } from "../api/queries";
 
 
 
 const SearchWrapper = styled.div`
-  
+    
 border-radius: 20px;
 background-color: var(--search-area-bg);
 padding-right: 12px;
@@ -70,7 +41,6 @@ opacity: .6;
 }
 }
 `
-
 const FlexDiv = styled.div`
 display:flex;
 justify-content: space-between;
@@ -83,8 +53,6 @@ width: 80%;
   align-items: center;
   }
 `
-
-
 const OpaqueLayer = styled.div`
 
     position:absolute;
@@ -97,7 +65,6 @@ const OpaqueLayer = styled.div`
   background: #000;
   z-index: 5;
 `
-
 const CardsContainer = styled.div`
 
 display: flex;
@@ -109,86 +76,83 @@ justify-content: center;
 }
 
 `
-
 const FormWrapper = styled.div`
-  position: relative;
+position: relative;
 
+`
+const ButtonWrapper = styled.div`
+display: flex;
+justify-content: space-between;
+> div {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  
+}
+button,a{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: button;
+  width: fit-content;
+  backface-visibility: hidden;
+  background-color: #405cf5;
+  height: fit-content;
+  border-radius: 6px;
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  font-size: 11px;
+  padding: 10px 20px;
+  text-align: center;
+  transition: all .2s,box-shadow .08s ease-in;
+  user-select: none;
+
+&:disabled {
+  cursor: default;
+}
+
+&:focus {
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+}
   `
-
-  const ButtonWrapper = styled.div`
+const AddButtonWrapper = styled.div`
+display: flex;
+align-items: space-between;
+button,a{
   display: flex;
-  justify-content: space-between;
-  > div {
-    display: flex;
-    align-items: center;
-    gap: 0.2em;
-    
-  }
-  button,a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    appearance: button;
-    width: fit-content;
-    backface-visibility: hidden;
-    background-color: #405cf5;
-    height: fit-content;
-    border-radius: 6px;
-    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    outline: none;
-    overflow: hidden;
-    font-size: 11px;
-    padding: 10px 20px;
-    text-align: center;
-    transition: all .2s,box-shadow .08s ease-in;
-    user-select: none;
-  
-  &:disabled {
-    cursor: default;
-  }
-  
-  &:focus {
-    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
-  }
-    `
-  const AddButtonWrapper = styled.div`
-  display: flex;
-  align-items: space-between;
-  button,a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    appearance: button;
-    width: fit-content;
-    backface-visibility: hidden;
-    background-color: #405cf5;
-    border-radius: 6px;
-    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    height: 44px;
-    margin: 12px 0 0;
-    outline: none;
-    overflow: hidden;
-    padding: 0 25px;
-    text-align: center;
-    transition: all .2s,box-shadow .08s ease-in;
-    user-select: none;
-  
-  &:disabled {
-    cursor: default;
-  }
-  
-  &:focus {
-    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
-  }
-    `
+  align-items: center;
+  justify-content: center;
+  appearance: button;
+  width: fit-content;
+  backface-visibility: hidden;
+  background-color: #405cf5;
+  border-radius: 6px;
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  height: 44px;
+  margin: 12px 0 0;
+  outline: none;
+  overflow: hidden;
+  padding: 0 25px;
+  text-align: center;
+  transition: all .2s,box-shadow .08s ease-in;
+  user-select: none;
 
-  const RemoveButtonWrapper = styled.div`
+&:disabled {
+  cursor: default;
+}
+
+&:focus {
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+}
+  `
+const RemoveButtonWrapper = styled.div`
   > div{
     display: flex;
   align-items: center;
@@ -220,8 +184,6 @@ const FormWrapper = styled.div`
     box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
   }
     `
-
-
 const FlexCards = styled.div`
 display:flex;
 flex-wrap: wrap;
@@ -238,11 +200,58 @@ box-shadow: 20px 20px 20px darken(rgba(0,2), 2%),
 background-color: rgba(0, 0, 0, 0.2);
 `
 
+
+
+function Customers() {
+  
+  const [customers, setCustomers] = useState<TCustomer[]>([])
+  const [showed, setShowed] = useState<boolean>(false)
+  // const { loading, data}: { loading: boolean, data: {"allCustomers": TCustomer[]}} = GetAllCustomers()
+  const { loading: GET_ALL_LOADING, data: GET_CUSTOMERS} = useQuery(QUERIES.GET_CUSTOMERS)
+
+  
+
+// const deleteCustomer =  (id:string, firstName: string, lastName: string) =>{
+//   confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
+
+// }
+
+
+
+
+  const showModal = () => {
+    setShowed(prev=> !prev)
+    console.log(showed)
+  }
+  useEffect(() =>{
+  
+    !GET_ALL_LOADING && setCustomers(GET_CUSTOMERS.allCustomers)
+    console.log(customers)
+  },[GET_ALL_LOADING]);
+
+
+const [searchText, setSearchText] = useState<string>("")
+
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchText(e.target.value);
+    console.log(searchText);
+
+  }
+
+
+  const [removeCustomer, {loading: DELELTE_LOADING, data: RM_CUSTOMER, error }] = useMutation(QUERIES.REMOVE_CUSTOMER);
+
+  console.log(RM_CUSTOMER)
+
+
+  if (DELELTE_LOADING) return 'Submitting...';
+  if (error) return `Submission error! ${error.message}`;
+
   return (
     <CardsContainer>
 <FlexDiv>
     <SearchWrapper>
-    <input value={""} type="text" placeholder="Search"/>
+    <input value={searchText} onChange={(e)=>handleSearch(e)} type="text" placeholder="Search"/>
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"  viewBox="0 0 24 24">
       <defs></defs>
       <circle cx="11" cy="11" r="8"></circle>
@@ -267,13 +276,13 @@ background-color: rgba(0, 0, 0, 0.2);
 
 
     <div className="cards-wrapper">
-    {loading && "loading..."}
+    {GET_ALL_LOADING && "loading..."}
       <div>
         <FlexCards>
       {customers?.map((cx) => {
         return (
-          <Card>
-          <div key={cx.id}>
+          <Card key={cx.id}>
+          <div>
           <h3>Name: {cx.firstName + " " + cx.lastName}</h3>
           <p>Email: {cx.email}</p>
           <p>Phone: {cx.phone}</p>
@@ -282,7 +291,9 @@ background-color: rgba(0, 0, 0, 0.2);
               <div>
 
             <RemoveButtonWrapper>
-          <button onClick={()=>deleteCustomer(cx.id, cx.firstName, cx.lastName)}>Remove</button>
+          <button onClick={()=>{
+              removeCustomer({ variables: { id:cx.id } });
+          }}>Remove</button>
             </RemoveButtonWrapper>
           <Link className="btn-not-filled" to={`/${cx.id}`}>
           Edit</Link>
