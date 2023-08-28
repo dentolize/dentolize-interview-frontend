@@ -9,6 +9,7 @@
 - [ ] update customer
 - [ ] dark theme
 - [ ] refetch after mutations
+- [ ] clean/re-factor/componentize code (styled-components)
 
 
 # Fullstack Developer Task
