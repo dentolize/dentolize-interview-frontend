@@ -15,7 +15,13 @@ left: 50%;
 transform: translate(-50%, -50%);
 transition: all 0.2s;
 z-index: 10;
-width: 70%;
+width: 40%;
+@media (max-width: 1200px){
+  width: 70%;
+}
+@media (max-width: 600px){
+  width: 90%;
+}
 
 form {
   background: #F5F9FF; 
@@ -24,6 +30,9 @@ form {
   margin: 0px auto;
   box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.2);
   border-radius: 5px;
+  @media (max-width: 400px){
+    padding: 1em;
+  }
   h1 {
     box-sizing: border-box;
     padding: 20px;
@@ -43,6 +52,12 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  @media (max-width: 400px){
+    font-size: 15px;
+    padding-inline: 10px;
+  }
+ 
 }
 >  input {
   width: 70%;
@@ -75,8 +90,10 @@ input {
 }
 > div:last-child{
   display: flex;
-  width: 40%;
+  width: 30%;
+  gap: 0.5em;
   justify-content: space-between;
+
 button:last-child{
   background-color: #e23e3e;
 }
@@ -262,9 +279,14 @@ const RemoveButtonWrapper = styled.div`
     `
 const FlexCards = styled.div`
 display:flex;
+margin: 0 auto;
 flex-wrap: wrap;
 justify-content: center;
+// justify-content: flex-start;
 gap: 0.5em;
+@media (max-width: 1050px){
+  justify-content: center;
+}
 `
 const Card = styled.div`
 min-width: 300px;
