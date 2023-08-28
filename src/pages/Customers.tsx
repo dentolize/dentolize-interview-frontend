@@ -371,12 +371,11 @@ const [removeCustomer, {loading: DELELTE_LOADING, data: RM_CUSTOMER, error }] = 
 
 const removeCx =  (id:string, firstName: string, lastName: string) =>{
   {
-    const confirmed = confirm(`Do Youy want to delete ${firstName + " " + lastName}'s profile?`)
+    const confirmed = confirm(`Are You Sure You Want to Delete ${firstName + " " + lastName}'s profile?`)
       if(!confirmed) return;
       setNotificationType({bg: "red", color:"#fff", body: `${firstName + " " + lastName} has been removed!`})
-      removeCustomer({ variables: { id }})
-      console.log(RM_CUSTOMER)
-      refetch()
+      removeCustomer({ variables: { id }, refetchQueries: [GET_CUSTOMERS]})
+      refetch(GET_CUSTOMERS)
       notify()
 }
 }
@@ -411,18 +410,20 @@ const addNewCustomer = (e:React.FormEvent) => {
 e.preventDefault()
 console.log(newCustomer)
 
-createCustomer({ variables: { ...newCustomer }})
+createCustomer({ variables: { ...newCustomer }, refetchQueries: [{query: GET_CUSTOMERS}]})
 console.log(CREATE_DATA)
 setNotificationType({bg: "green", color:"#fff", body: `${newCustomer.firstName + " " + newCustomer.lastName} Has Been Created!`})
       console.log(RM_CUSTOMER)
       setShowed(false)
-      setNewCustomer({firstName: "", lastName: "", email: "", phone: ""})
+      resetForm()
       refetch()
       notify()
 
     }
 
-  
+    const resetForm = () => {
+      setNewCustomer({firstName: "", lastName: "", email: "", phone: ""});
+    };
   
   
   // =========== Handle Search Bar =================
@@ -505,7 +506,7 @@ const searchVal = e.target.value.toLowerCase()
     <AddButtonWrapper>
       <button type="submit">Create
         </button>
-      <button type="reset">Reset
+      <button type="reset" onClick={resetForm}>Reset
         </button>
       </AddButtonWrapper> 
       {CREATE_ERROR && "Invalid Inputs!"}
