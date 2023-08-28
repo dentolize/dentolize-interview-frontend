@@ -1,3 +1,17 @@
+### TODOs:
+
+- [x] list all customers data
+- [x] display one customer data + list orders
+- [x] filter customers on searching
+- [x] dynamic notification sys for better ux 
+- [x] ceate customer
+- [x] delete customer
+- [ ] update customer
+- [ ] dark theme
+- [ ] refetch after mutations
+- [ ] clean/re-factor/componentize code (styled-components)
+
+
 # Fullstack Developer Task
 
 Welcome to the Fullstack Developer Task! This is an opportunity for you to showcase your skills in creating a web application using React, TypeScript, and GraphQL.

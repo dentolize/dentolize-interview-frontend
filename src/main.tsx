@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import App from "./App.tsx";
-import "./index.css";
+import { BrowserRouter } from "react-router-dom";
 
 const client = new ApolloClient({
   uri: import.meta.env.VITE_GRAPHQL_URI as string,
@@ -15,7 +15,9 @@ const root = ReactDOM.createRoot(rootEl!);
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
+    <BrowserRouter>
       <App />
+    </BrowserRouter>
     </ApolloProvider>
   </React.StrictMode>
 );
